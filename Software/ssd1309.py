@@ -1,5 +1,6 @@
 # SPI Code developed for the DIYMore SPI/IIC Screen
 from microbit import *
+import sprites
 # from microbit import spi, pin16, pin14, pin15, Image
 
 class SSD1309():
@@ -14,7 +15,7 @@ class SSD1309():
             b'\xc8\xDA\x12\x81\xCF\xd9\xF1\xDB\x40\xA6\xd6\x00\xaf'
         pin14.write_digital(0)
         spi.init(miso=pin15,
-                 baudrate=8000000)
+                 baudrate=6000000)
         pin14.write_digital(1)
 
         self.__cmd(c)
@@ -33,14 +34,20 @@ class SSD1309():
         self.__set_pos()
         spi.write(self.screen)
 
-    def setPixel(self, coOrdinates: tuple, color: int):
+    def setPixel(self, coOrdinates: list, color: int, showNow: bool = False, 
+                 sprite: bool = False):
         page, shiftPage = divmod(coOrdinates[1], 8)
         i = coOrdinates[0] + page * 128 + 1
         bites = self.screen[i] | (1 << shiftPage) if color else self.screen[
                 i] & ~ (1 << shiftPage)
         self.screen[i] = bites
-        self.__set_pos(coOrdinates[0], page)
-        spi.write(bytearray([bites]))
+        
+        if showNow:
+            if not sprite:
+                self.__set_pos(coOrdinates[0], page)
+                spi.write(bytearray([bites]))
+            else:
+                self.drawScreen()
 
     def getPixel(self, coOrdinates: tuple):
         page, shiftPage = divmod(coOrdinates[1], 8)
@@ -48,7 +55,7 @@ class SSD1309():
 
         return (self.screen[i] & (1 << shiftPage)) >> shiftPage
 
-    def textBlock(self, coOrdinates: tuple, text, size: int = 1):
+    def textBlock(self, coOrdinates: list, text, size: int = 1, showNow: bool = False):
         for i in range(0, min(len(text), 25//size - coOrdinates[0])):
             for column in range(0, 5):
                 col = 0
@@ -63,12 +70,36 @@ class SSD1309():
                     self.screen[ind + 129] = self.screen[ind + 128]
                 else:
                     self.screen[ind] = col
-        self.drawScreen()
+        if showNow:
+            self.drawScreen()
+
+    def setSprite(self, sprite: dict, coOrdinates: list):
+        for key, value in sprite.items():
+            for pixels in value:
+                self.setPixel(pixels, 1, False, True)
 
 if __name__ == "__main__":
     # Test the Module
     oled = SSD1309()
     oled.clearScreen()
     oled.textBlock((0, 0), "Hiya!")
-    oled.setPixel((126, 63), 1)
+    oled.setPixel([100, 20], 1, False)
+    
     oled.drawScreen()
+    sleep(500)
+    spaceShip = sprites.sprite(sprites.spaceship)
+
+    spaceShipPosition = [0, 0]
+    oled.setSprite(spaceShip.sprite, spaceShipPosition)
+
+    for i in range(1, 50):
+        oled.clearScreen()
+        spaceShipPosition = spaceShip.move("RIGHT", spaceShipPosition, 2)
+        oled.setSprite(spaceShip.sprite, spaceShipPosition)
+        oled.drawScreen()
+        
+    for i in range(1, 50):
+        oled.clearScreen()
+        spaceShipPosition = spaceShip.move("LEFT", spaceShipPosition, 2)
+        oled.setSprite(spaceShip.sprite, spaceShipPosition)
+        oled.drawScreen()
