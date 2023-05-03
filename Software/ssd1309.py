@@ -1,7 +1,6 @@
 # SPI Code developed for the DIYMore SPI/IIC Screen
 from microbit import *
 import sprites
-# from microbit import spi, pin16, pin14, pin15, Image
 
 class SSD1309():
     def __cmd(self, c):
@@ -34,14 +33,14 @@ class SSD1309():
         self.__set_pos()
         spi.write(self.screen)
 
-    def setPixel(self, coOrdinates: list, color: int, showNow: bool = False, 
+    def setPixel(self, coOrdinates: list, color: int, showNow: bool = False,
                  sprite: bool = False):
         page, shiftPage = divmod(coOrdinates[1], 8)
         i = coOrdinates[0] + page * 128 + 1
         bites = self.screen[i] | (1 << shiftPage) if color else self.screen[
                 i] & ~ (1 << shiftPage)
         self.screen[i] = bites
-        
+
         if showNow:
             if not sprite:
                 self.__set_pos(coOrdinates[0], page)
@@ -84,7 +83,7 @@ if __name__ == "__main__":
     oled.clearScreen()
     oled.textBlock((0, 0), "Hiya!")
     oled.setPixel([100, 20], 1, False)
-    
+
     oled.drawScreen()
     sleep(500)
     spaceShip = sprites.sprite(sprites.spaceship)
@@ -97,7 +96,7 @@ if __name__ == "__main__":
         spaceShipPosition = spaceShip.move("RIGHT", spaceShipPosition, 2)
         oled.setSprite(spaceShip.sprite, spaceShipPosition)
         oled.drawScreen()
-        
+
     for i in range(1, 50):
         oled.clearScreen()
         spaceShipPosition = spaceShip.move("LEFT", spaceShipPosition, 2)
