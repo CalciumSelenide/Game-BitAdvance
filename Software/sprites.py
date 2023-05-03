@@ -6,9 +6,33 @@ class sprite():
 
     def move(self, direction:str, spritePosition, speed:int = 1):
         if (direction.upper() == "UP"):
-            pass
+            for key, value in self.sprite.items():
+                updatedValList = []
+                for i in range(len(value)):
+                    xPos = value[i][0]
+                    yPos = value[i][1]
+                    coOrdinatePair = [xPos, yPos - speed]
+                    updatedValList.append(coOrdinatePair)
+
+                self.sprite[key] = updatedValList
+            xPos = spritePosition[0]
+            yPos = spritePosition[1]
+            spritePosition = [spritePosition[0], spritePosition[1] - speed]
+
         elif (direction.upper() == "DOWN"):
-            pass
+            for key, value in self.sprite.items():
+                updatedValList = []
+                for i in range(len(value)):
+                    xPos = value[i][0]
+                    yPos = value[i][1]
+                    coOrdinatePair = [xPos, yPos + speed]
+                    updatedValList.append(coOrdinatePair)
+
+                self.sprite[key] = updatedValList
+            xPos = spritePosition[0]
+            yPos = spritePosition[1]
+            spritePosition = [spritePosition[0], spritePosition[1] + speed]
+
         elif (direction.upper() == "LEFT"):
             for key, value in self.sprite.items():
                 updatedValList = []
@@ -17,12 +41,12 @@ class sprite():
                     yPos = value[i][1]
                     coOrdinatePair = [xPos - speed, yPos]
                     updatedValList.append(coOrdinatePair)
-                    
+
                 self.sprite[key] = updatedValList
             xPos = spritePosition[0]
             yPos = spritePosition[1]
             spritePosition = [spritePosition[0] - speed, spritePosition[1]]
-            
+
         elif (direction.upper() == "RIGHT"):
             for key, value in self.sprite.items():
                 updatedValList = []
@@ -31,12 +55,12 @@ class sprite():
                     yPos = value[i][1]
                     coOrdinatePair = [xPos + speed, yPos]
                     updatedValList.append(coOrdinatePair)
-                    
+
                 self.sprite[key] = updatedValList
             xPos = spritePosition[0]
             yPos = spritePosition[1]
             spritePosition = [spritePosition[0] + speed, spritePosition[1]]
-            
+
         else:
             print("ERROR")
 
