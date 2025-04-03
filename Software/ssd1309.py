@@ -77,28 +77,28 @@ class SSD1309():
             for pixels in value:
                 self.setPixel(pixels, 1, False, True)
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
     # Test the Module
-    oled = SSD1309()
-    oled.clearScreen()
-    oled.textBlock((0, 0), "Hiya!")
-    oled.setPixel([100, 20], 1, False)
+#    oled = SSD1309()
+#    oled.clearScreen()
+#    oled.textBlock((0, 0), "Hiya!")
+#    oled.setPixel([100, 20], 1, False)
 
-    oled.drawScreen()
-    sleep(500)
-    spaceShip = sprites.sprite(sprites.spaceship)
+#    oled.drawScreen()
+#    sleep(500)
+#    spaceShip = sprites.sprite(sprites.spaceship)
 
-    spaceShipPosition = [0, 0]
-    oled.setSprite(spaceShip.sprite, spaceShipPosition)
+#    spaceShipPosition = [0, 0]
+#    oled.setSprite(spaceShip.sprite, spaceShipPosition)
 
-    for i in range(1, 50):
-        oled.clearScreen()
-        spaceShipPosition = spaceShip.move("RIGHT", spaceShipPosition, 2)
-        oled.setSprite(spaceShip.sprite, spaceShipPosition)
-        oled.drawScreen()
+#    for i in range(1, 50):
+#        oled.clearScreen()
+#        spaceShipPosition = spaceShip.move("RIGHT", spaceShipPosition, 2)
+#        oled.setSprite(spaceShip.sprite, spaceShipPosition)
+#        oled.drawScreen()
 
-    for i in range(1, 50):
-        oled.clearScreen()
-        spaceShipPosition = spaceShip.move("LEFT", spaceShipPosition, 2)
-        oled.setSprite(spaceShip.sprite, spaceShipPosition)
-        oled.drawScreen()
+#    for i in range(1, 50):
+#        oled.clearScreen()
+#        spaceShipPosition = spaceShip.move("LEFT", spaceShipPosition, 2)
+#        oled.setSprite(spaceShip.sprite, spaceShipPosition)
+#        oled.drawScreen()
